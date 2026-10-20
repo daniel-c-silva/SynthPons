@@ -66,8 +66,7 @@ I also ran into a problem with the (#) symbol in URL react section, so I just re
 though in the end I found the project easy and fun to do.
 
 
-(!new)- Also added harmonics and ADSR. not intuitive at all sound engineering is not my home. had a lot of help from CLAUDE to figure it out but it ended up working.
-
+(!new)- Also added harmonics and ADSR. not intuitive at all sound engineering is not my home.
 
 
 I'll keep updating it.
