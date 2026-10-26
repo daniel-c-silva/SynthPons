@@ -1,167 +1,179 @@
-import { useState } from "react";
 
+:root {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, monospace;
 
-function Main() {
-    
+  font-family: var(--font-sans);
+  color: var(--sb-text);
+  background: var(--sb-bg);
+  font-synthesis: none;
 
-    // * Chords function vars
-    const[chords, setChords] = useState("") //  * set chords for chords
-    const[duration, setDuration] = useState("") // * set duration for duration
-    // * Melody function vars
-    const[notes, setNotes] = useState("")
-    const[noteDuration, setNoteDuration] = useState("")
-    // * instrument function
-    const[instrument, setInstrument] = useState("")
-    // * instrument function melody
-    const[instrumentMelody, setInstrumentMelody] = useState("")
-
-        // * Chords function 
-        function handleChords() {
-            const url = `${process.env.REACT_APP_API_URL}/api/create_chord_progression/${chords}/${duration}/${instrument}`;
-            
-            fetch(url)
-             .then(response => response.blob()) // * when we get the response convert to blob (audio data in binary)
-             .then(blob => { // * once converted run this: 
-                  
-                 const audioUrl = window.URL.createObjectURL(blob); // * converts the blob into a playble url the browser gets
-                 const audio = new Audio(audioUrl) // * creates an audio player objet kinda like <audio> in html
-                 audio.play(); // * plays it.
-                 })
-            }
-        
-        function handleMelody(){
-            const url = `${process.env.REACT_APP_API_URL}/api/create_melody/${notes}/${noteDuration}/${instrumentMelody}`;
-
-            fetch(url)
-             .then(response => response.blob())
-             .then(blob => {
-
-                 const audioUrl = window.URL.createObjectURL(blob); // * converts the blob into a playble url the browser gets
-                 const audio = new Audio(audioUrl) // * creates an audio player objet kinda like <audio> in html
-                 audio.play(); // * plays it. 
-             })
-
-
-
-
-
-        }
-        
-
-
-
-  return (
-    <div>
-
-<div className="instructions">
-  <h2>Instructions:</h2>
-  
-  <div style={{display: 'flex', gap: '1rem', marginBottom: '1rem'}}>
-    <div style={{flex: 1, background: '#f5f5f5', borderRadius: '8px', padding: '1rem'}}>
-      <h3>Chord Progression</h3>
-      <p>Stack notes simultaneously to build harmony across a sequence of chords.</p>
-    </div>
-    <div style={{flex: 1, background: '#f5f5f5', borderRadius: '8px', padding: '1rem'}}>
-      <h3>Melody</h3>
-      <p>Play individual notes one after another to form a melodic line.</p>
-    </div>
-  </div>
-
-  <h4>Instruments</h4>
-  <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '1rem'}}>
-    {['saxophone','piano','violin','flute','trumpet','cello','electric_bass','clarinet','church_organ'].map(i => (
-      <code key={i} style={{background: '#eee', borderRadius: '4px', padding: '2px 8px'}}>{i}</code>
-    ))}
-  </div>
-
-  <h4>Notes</h4>
-  <div style={{display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '0.5rem'}}>
-    {['A','As','B','C','Cs','D','Ds','E','F','Fs','G','Gs'].map(n => (
-      <code key={n} style={{background: '#eee', borderRadius: '4px', padding: '2px 8px'}}>{n}</code>
-    ))}
-  </div>
-  <p style={{fontSize: '13px', color: '#666'}}>s = sharp (e.g. Cs = C♯, Fs = F♯)</p>
-
-  <h4>Chord types — format: Note_Type</h4>
-  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '1rem'}}>
-    {[['_maj','major triad'],['_min','minor triad'],['_dim','diminished'],['_aug','augmented'],
-      ['7','dominant 7th'],['_maj7','major 7th'],['_m7','minor 7th'],['_m7b5','half-diminished']].map(([suffix, label]) => (
-      <div key={suffix}><code style={{background: '#eee', borderRadius: '4px', padding: '2px 8px'}}>{suffix}</code> {label}</div>
-    ))}
-  </div>
-
-  <h4>Duration</h4>
-  <p>Whole number in seconds per note or chord — e.g. <code>1</code>, <code>2</code>, <code>4</code></p>
-
-  <div style={{background: '#e8f0fe', borderRadius: '8px', padding: '0.75rem 1rem', marginTop: '1rem'}}>
-    💡 Try: instrument <code>saxophone</code>, duration <code>2</code>, chords <code>C_maj7,A_m7,D_m7,G7</code>
-  </div>
-</div>
-
-      <div className="form-container">
-        <button className="Button" id="send-button" onClick={handleChords}> Send</button>
-        
-        <input
-         className="Input-field"
-         id="instrument-input"
-         type="text"
-         placeholder="instrument, ex: violin, piano, saxophone"
-         value={instrument}
-         onChange={(userTyped) => setInstrument(userTyped.target.value)}
-        />
-      
-
-        <input 
-         className="Input-field"
-         id="chords-input"
-         type="text"
-         placeholder="Chords, example: C_maj,A_min,B_dim"
-         value={chords}
-         onChange={(userTyped) => setChords(userTyped.target.value)}/>
-
-
-        <input 
-        className="Input-field"
-        id="duration-input"
-        type="text" 
-        placeholder="Chord duration, example: 1 or 4"
-        value={duration}
-        onChange={(userTyped) => setDuration(userTyped.target.value)}/>
-      </div>
-
-      <div className="form-container-melody">
-        <button className="Button" id="send-button" onClick={handleMelody}> Send</button>
-
-        <input
-          className="Input-field"
-          id="instrument-input"   
-          type="text"
-          placeholder="instrument, ex: violin, piano, saxophone"
-          value={instrumentMelody}
-          onChange={(userTyped) => setInstrumentMelody(userTyped.target.value)} 
-        />
-
-        <input 
-         className="Input-field"
-         id="chords-input"
-         type="text"
-         placeholder="Notes, ex: A,B,D,Cs"
-         value={notes}
-         onChange={(userTyped) => setNotes(userTyped.target.value)}/>
-
-
-        <input 
-        className="Input-field"
-        id="duration-input"
-        type="text" 
-        placeholder="Note duration, example: 1 or 4"
-        value={noteDuration}
-        onChange={(userTyped) => setNoteDuration(userTyped.target.value)}/>
-      </div>
-
-
-    </div>
-  );
+  --sb-primary: #fa8075;
+  --sb-primary-hover: #e96f65;
+  --sb-soft: #fff0ed;
+  --sb-ink: #152622;
+  --sb-text: #1d1d1f;
+  --sb-muted: #6e6e73;
+  --sb-line: rgba(21, 38, 34, 0.1);
+  --sb-surface: rgba(255, 255, 255, 0.85);
+  --sb-surface-alt: #f4f1ea;
+  --sb-bg: #f5f5f7;
+  --sb-white: #ffffff;
 }
 
-export default Main;
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--sb-bg); }
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--sb-bg);
+  color: var(--sb-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, textarea, select, input { font: inherit; }
+button { cursor: pointer; }
+
+button:focus-visible, textarea:focus-visible, input:focus-visible {
+  outline: 3px solid rgba(250, 128, 117, 0.35);
+  outline-offset: 2px;
+}
+
+::selection {
+  color: var(--sb-ink);
+  background: rgba(250, 128, 117, 0.35);
+}
+
+/* ==========================================
+   MAIN COMPONENT LAYOUT
+   ========================================== */
+
+div {
+  color: var(--sb-text);
+}
+
+/* Instructions Panel */
+.instructions {
+  max-width: 800px;
+  margin: 40px auto 30px;
+  padding: 32px;
+  background: var(--sb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 14px 40px rgba(21, 38, 34, 0.07);
+  backdrop-filter: blur(24px);
+}
+
+.instructions h2, 
+.instructions h4 {
+  font-family: var(--font-serif);
+  color: var(--sb-ink);
+  letter-spacing: -0.02em;
+  margin-top: 0;
+}
+
+.instructions code {
+  color: var(--sb-ink) !important;
+  font-family: var(--font-mono);
+}
+
+/* Form Containers (Chords & Melody sections) */
+.form-container,
+.form-container-melody {
+  max-width: 800px;
+  margin: 0 auto 30px;
+  padding: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--sb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 14px 40px rgba(21, 38, 34, 0.07);
+  backdrop-filter: blur(24px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.form-container:hover,
+.form-container-melody:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 52px rgba(21, 38, 34, 0.1);
+}
+
+/* Input Fields */
+.Input-field {
+  width: 100%;
+  padding: 14px 18px;
+  color: var(--sb-ink);
+  caret-color: var(--sb-primary);
+  background: rgba(245, 245, 247, 0.82);
+  border: 1px solid var(--sb-line);
+  border-radius: 12px;
+  outline: none;
+  font: 500 15px var(--font-mono);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.Input-field:hover {
+  background: #f1f1f3;
+}
+
+.Input-field:focus {
+  background: var(--sb-white);
+  border-color: rgba(250, 128, 117, 0.7);
+  box-shadow: 0 0 0 4px rgba(250, 128, 117, 0.12);
+}
+
+.Input-field::placeholder {
+  color: var(--sb-muted);
+  opacity: 0.6;
+}
+
+/* Action Buttons */
+.Button {
+  padding: 12px 20px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: var(--sb-white);
+  background: var(--sb-ink);
+  border: 0;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(21, 38, 34, 0.18);
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.Button:hover {
+  background: var(--sb-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(250, 128, 117, 0.28);
+}
+
+.Button:active {
+  transform: scale(0.98);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--sb-bg); }
+::-webkit-scrollbar-thumb { background: #c7c7cc; border: 2px solid var(--sb-bg); border-radius: 8px; }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .instructions,
+  .form-container,
+  .form-container-melody {
+    padding: 20px;
+    margin: 16px;
+    border-radius: 16px;
+  }
+}
