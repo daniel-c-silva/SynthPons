@@ -1,4 +1,4 @@
-# SynthBridge
+# SynthPons
 
 **Pretty straight forward, type the chords and melodies and you get the sounds**
 
